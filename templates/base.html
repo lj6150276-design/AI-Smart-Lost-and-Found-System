@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}AI Smart Lost & Found{% endblock %}</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+            <a href="{{ url_for('dashboard') }}" class="brand">
+                <span class="brand-icon">🔎</span>
+                <span>Smart<span class="brand-highlight">Lost</span> & Found</span>
+            </a>
+
+
+            {% if session.get('user_id') %}
+
+            <div class="nav-links">
+
+                <a href="{{ url_for('dashboard') }}">
+                    🏠 Dashboard
+                </a>
+
+                <a href="{{ url_for('my_reports') }}">
+                    📋 My Reports
+                </a>
+
+                <a href="{{ url_for('search') }}">
+                    🔍 Search
+                </a>
+
+                <a href="{{ url_for('notifications') }}" class="notification-link">
+                    🔔 Notifications
+
+                    {% if unread_notifications is defined and unread_notifications > 0 %}
+                        <span class="notification-badge">
+                            {{ unread_notifications }}
+                        </span>
+                    {% endif %}
+                </a>
+
+                <a href="{{ url_for('logout') }}" class="logout-link">
+                    🚪 Logout
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </nav>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <div>
+                <strong>🔎 AI Smart Lost & Found</strong>
+                <p>
+                    AI-powered platform to reconnect lost items
+                    with their owners.
+                </p>
+            </div>
+
+            <div class="footer-right">
+                <span>🤖 AI Matching</span>
+                <span>🔐 Secure</span>
+                <span>⚡ Smart</span>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 AI Smart Lost & Found • All Rights Reserved
+        </div>
+
+    </footer>
+
+
+</body>
+</html>

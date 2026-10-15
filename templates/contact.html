@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Contact {{ contact_type }} | AI Smart Lost & Found{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <h1>
+        📞 Contact {{ contact_type }}
+    </h1>
+
+    <p>
+        Use the contact details below to coordinate the return of the item.
+    </p>
+
+</div>
+
+
+<div class="contact-card">
+
+    <!-- Avatar -->
+
+    <div class="contact-avatar">
+
+        {% if contact_type == "Finder" %}
+            🔎
+        {% else %}
+            👤
+        {% endif %}
+
+    </div>
+
+
+    <!-- Contact Type -->
+
+    {% if contact_type == "Finder" %}
+
+        <span class="badge badge-info">
+            🔎 Item Finder
+        </span>
+
+    {% else %}
+
+        <span class="badge badge-success">
+            👤 Item Owner
+        </span>
+
+    {% endif %}
+
+
+    <h2 style="
+        color:#f8fafc;
+        margin-top:15px;
+    ">
+        {{ contact_name }}
+    </h2>
+
+
+    <!-- Item Information -->
+
+    <div class="contact-info">
+
+        <h3 style="
+            color:#f8fafc;
+            margin-bottom:15px;
+        ">
+            📦 Item Details
+        </h3>
+
+        <p>
+            <strong>Item:</strong>
+            {{ item_name }}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            📍 {{ location }}
+        </p>
+
+    </div>
+
+
+    <!-- Contact Information -->
+
+    <div class="contact-info">
+
+        <h3 style="
+            color:#f8fafc;
+            margin-bottom:15px;
+        ">
+            📞 Contact Information
+        </h3>
+
+
+        {% if contact_phone %}
+
+        <p>
+            📱
+            <strong>Phone:</strong>
+            {{ contact_phone }}
+        </p>
+
+        {% endif %}
+
+
+        {% if contact_email %}
+
+        <p>
+            📧
+            <strong>Email:</strong>
+            {{ contact_email }}
+        </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Action Buttons -->
+
+    <div style="
+        display:flex;
+        justify-content:center;
+        gap:12px;
+        flex-wrap:wrap;
+        margin-top:25px;
+    ">
+
+        {% if contact_phone %}
+
+        <a
+            href="tel:{{ contact_phone }}"
+            class="btn btn-success"
+        >
+            📞 Call {{ contact_type }}
+        </a>
+
+        {% endif %}
+
+
+        {% if contact_email %}
+
+        <a
+            href="mailto:{{ contact_email }}"
+            class="btn btn-primary"
+        >
+            📧 Send Email
+        </a>
+
+        {% endif %}
+
+
+        <a
+            href="{{ url_for(
+                'matches',
+                lost_id=lost_id
+            ) }}"
+            class="btn btn-secondary"
+        >
+            ← Back to Matches
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

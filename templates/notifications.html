@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications | AI Smart Lost & Found{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:15px;
+        flex-wrap:wrap;
+    ">
+
+        <div>
+            <h1>🔔 Notifications</h1>
+
+            <p>
+                Stay updated about AI matches and your lost & found reports.
+            </p>
+        </div>
+
+        {% if notifications %}
+
+        <a
+            href="{{ url_for('notifications_read_all') }}"
+            class="btn btn-primary"
+        >
+            ✓ Mark All as Read
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+{% if notifications %}
+
+    {% for notification in notifications %}
+
+    <div class="notification-card
+        {% if not notification.is_read %}
+            unread
+        {% endif %}
+    ">
+
+        <!-- ICON -->
+
+        <div class="notification-icon">
+
+            {% if notification.notification_type == 'match' %}
+                🤖
+            {% elif notification.notification_type == 'recovery' %}
+                ✅
+            {% else %}
+                🔔
+            {% endif %}
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="notification-content">
+
+            <h3>
+                {{ notification.title }}
+            </h3>
+
+            <p>
+                {{ notification.message }}
+            </p>
+
+
+            {% if notification.item_name %}
+
+            <p style="margin-top:10px; color:#60a5fa;">
+
+                📦
+                <strong>Item:</strong>
+                {{ notification.item_name }}
+
+            </p>
+
+            {% endif %}
+
+
+            {% if notification.created_at %}
+
+            <div class="notification-time">
+
+                🕒
+                {{ notification.created_at }}
+
+            </div>
+
+            {% endif %}
+
+
+            {% if not notification.is_read %}
+
+            <div style="margin-top:15px;">
+
+                <a
+                    href="{{ url_for(
+                        'notification_read',
+                        notification_id=notification.id
+                    ) }}"
+                    class="btn btn-outline"
+                >
+                    ✓ Mark as Read
+                </a>
+
+            </div>
+
+            {% else %}
+
+            <div style="margin-top:12px;">
+
+                <span class="badge badge-success">
+                    ✓ Read
+                </span>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+
+{% else %}
+
+    <div class="empty-state">
+
+        <div class="empty-state-icon">
+            🔔
+        </div>
+
+        <h2>
+            No Notifications
+        </h2>
+
+        <p>
+            You don't have any notifications yet.
+        </p>
+
+    </div>
+
+{% endif %}
+
+
+<div style="
+    margin-top:30px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+">
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="btn btn-secondary"
+    >
+        ← Back to Dashboard
+    </a>
+
+    <a
+        href="{{ url_for('my_reports') }}"
+        class="btn btn-outline"
+    >
+        📋 My Reports
+    </a>
+
+</div>
+
+{% endblock %}

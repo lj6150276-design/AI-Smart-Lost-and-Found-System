@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}AI Smart Lost & Found{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+
+<div class="hero-section">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            🤖 AI POWERED LOST & FOUND
+        </div>
+
+        <h1>
+            Find What You Lost.<br>
+            <span>Return What You Found.</span>
+        </h1>
+
+        <p>
+            An intelligent Lost & Found platform that uses
+            AI-powered matching to connect lost items with
+            their rightful owners.
+        </p>
+
+
+        <div class="hero-actions">
+
+            <a
+                href="{{ url_for('login') }}"
+                class="btn btn-primary"
+            >
+                🚀 Get Started
+            </a>
+
+            <a
+                href="{{ url_for('register') }}"
+                class="btn btn-outline"
+            >
+                📝 Create Account
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI VISUAL -->
+
+    <div class="hero-visual">
+
+        <div class="ai-circle">
+
+            <div class="ai-icon">
+                🤖
+            </div>
+
+        </div>
+
+        <div class="floating-card floating-card-1">
+            🔍 AI Matching
+        </div>
+
+        <div class="floating-card floating-card-2">
+            📦 Lost Item
+        </div>
+
+        <div class="floating-card floating-card-3">
+            ✅ Match Found
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FEATURES -->
+
+<div class="page-header" style="margin-top:70px; text-align:center;">
+
+    <h2>
+        ✨ How Smart Lost & Found Works
+    </h2>
+
+    <p>
+        Simple reporting. Intelligent matching. Faster recovery.
+    </p>
+
+</div>
+
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            📝
+        </div>
+
+        <h3>
+            Report
+        </h3>
+
+        <p>
+            Report your lost or found item with
+            important details and an image.
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            🤖
+        </div>
+
+        <h3>
+            AI Matching
+        </h3>
+
+        <p>
+            Our system compares item details and
+            images to find possible matches.
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            📞
+        </div>
+
+        <h3>
+            Connect
+        </h3>
+
+        <p>
+            Once a match is found, the owner and
+            finder can contact each other.
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            ✅
+        </div>
+
+        <h3>
+            Recover
+        </h3>
+
+        <p>
+            Coordinate with the finder and recover
+            your lost item.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- CTA -->
+
+<div class="empty-state" style="margin-top:50px;">
+
+    <div class="empty-state-icon">
+        🔐
+    </div>
+
+    <h2>
+        Ready to Find Your Item?
+    </h2>
+
+    <p>
+        Create an account and start using
+        AI Smart Lost & Found today.
+    </p>
+
+    <div style="
+        display:flex;
+        justify-content:center;
+        gap:12px;
+        flex-wrap:wrap;
+        margin-top:20px;
+    ">
+
+        <a
+            href="{{ url_for('register') }}"
+            class="btn btn-primary"
+        >
+            🚀 Get Started
+        </a>
+
+        <a
+            href="{{ url_for('login') }}"
+            class="btn btn-secondary"
+        >
+            🔐 Login
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}AI Matches | Smart Lost & Found{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <h1>🤖 AI Smart Matches</h1>
+
+    <p>
+        AI has analyzed found items and identified possible matches
+        for your lost item.
+    </p>
+
+</div>
+
+
+<!-- ================= LOST ITEM ================= -->
+
+<div class="card" style="margin-bottom:30px;">
+
+    <h2 style="color:#f8fafc; margin-bottom:15px;">
+        🔴 Lost Item
+    </h2>
+
+    <div class="grid">
+
+        <div>
+            <p style="color:#94a3b8;">Item Name</p>
+            <h3 style="color:#f8fafc;">
+                {{ lost_item.item_name }}
+            </h3>
+        </div>
+
+        <div>
+            <p style="color:#94a3b8;">Category</p>
+            <h3 style="color:#f8fafc;">
+                {{ lost_item.category }}
+            </h3>
+        </div>
+
+        <div>
+            <p style="color:#94a3b8;">Location</p>
+            <h3 style="color:#f8fafc;">
+                📍 {{ lost_item.location }}
+            </h3>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MATCHES ================= -->
+
+{% if matches %}
+
+<div class="report-grid">
+
+    {% for match in matches %}
+
+    <div class="report-card ai-match">
+
+        <!-- IMAGE -->
+
+        {% if match.image %}
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/' + match.image
+                ) }}"
+                alt="{{ match.item_name }}"
+                class="report-image"
+            >
+
+        {% else %}
+
+            <div
+                class="report-image"
+                style="
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:55px;
+                "
+            >
+                📦
+            </div>
+
+        {% endif %}
+
+
+        <!-- CONTENT -->
+
+        <div class="report-content">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:10px;
+                flex-wrap:wrap;
+                margin-bottom:15px;
+            ">
+
+                <h3>
+                    {{ match.item_name }}
+                </h3>
+
+                <span class="ai-score">
+                    🤖 {{ match.match_score }}% Match
+                </span>
+
+            </div>
+
+
+            <!-- AI SCORE BAR -->
+
+            <div class="match-progress">
+
+                <div
+                    class="match-progress-bar"
+                    style="width: {{ match.match_score }}%;"
+                ></div>
+
+            </div>
+
+
+            <p>
+                📂
+                <strong>Category:</strong>
+                {{ match.category }}
+            </p>
+
+
+            <p>
+                📍
+                <strong>Location:</strong>
+                {{ match.location }}
+            </p>
+
+
+            {% if match.description %}
+
+            <p>
+                📝
+                <strong>Description:</strong>
+                {{ match.description }}
+            </p>
+
+            {% endif %}
+
+
+            <!-- ================= FINDER INFO ================= -->
+
+            <div class="contact-info" style="text-align:left;">
+
+                <h3 style="margin-bottom:12px;">
+                    👤 Finder Information
+                </h3>
+
+                <p>
+                    <strong>Name:</strong>
+                    {{ match.found_by }}
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    {{ match.found_phone }}
+                </p>
+
+            </div>
+
+
+            <!-- ================= CONTACT ================= -->
+
+            {% if session.get('user_id') == lost_item.user_id %}
+
+                <!-- LOST OWNER -->
+
+                <a
+                    href="{{ url_for(
+                        'contact_owner',
+                        lost_id=lost_item.id,
+                        found_id=match.id
+                    ) }}"
+                    class="btn btn-primary"
+                    style="width:100%; margin-top:10px;"
+                >
+                    📞 Contact Finder
+                </a>
+
+
+            {% elif session.get('user_id') == match.user_id %}
+
+                <!-- FINDER -->
+
+                <a
+                    href="{{ url_for(
+                        'contact_owner',
+                        lost_id=lost_item.id,
+                        found_id=match.id
+                    ) }}"
+                    class="btn btn-success"
+                    style="width:100%; margin-top:10px;"
+                >
+                    👤 Contact Owner
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+{% else %}
+
+<!-- ================= NO MATCH ================= -->
+
+<div class="empty-state">
+
+    <div class="empty-state-icon">
+        🔍
+    </div>
+
+    <h2>
+        No Match Found
+    </h2>
+
+    <p>
+        AI could not find a suitable matching item yet.
+        Try again later when more items are reported.
+    </p>
+
+</div>
+
+{% endif %}
+
+
+<!-- ================= BACK ================= -->
+
+<div style="
+    margin-top:30px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+">
+
+    <a
+        href="{{ url_for('my_reports') }}"
+        class="btn btn-secondary"
+    >
+        ← Back to My Reports
+    </a>
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="btn btn-outline"
+    >
+        🏠 Dashboard
+    </a>
+
+</div>
+
+{% endblock %}

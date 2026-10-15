@@ -1,0 +1,402 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | AI Smart Lost & Found{% endblock %}
+
+{% block content %}
+
+<!-- ================= PAGE HEADER ================= -->
+
+<div class="page-header">
+
+    <h1>
+        Welcome back, {{ name }} 👋
+    </h1>
+
+    <p>
+        Manage your lost and found items from one smart dashboard.
+    </p>
+
+</div>
+
+
+<!-- ================= STATISTICS ================= -->
+
+<div class="stats-grid">
+
+    <!-- Lost Items -->
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            🔴
+        </div>
+
+        <div class="stat-number">
+            {{ total_lost }}
+        </div>
+
+        <div class="stat-label">
+            Total Lost Items
+        </div>
+
+    </div>
+
+
+    <!-- Found Items -->
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            🟢
+        </div>
+
+        <div class="stat-number">
+            {{ total_found }}
+        </div>
+
+        <div class="stat-label">
+            Total Found Items
+        </div>
+
+    </div>
+
+
+    <!-- Matches -->
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            🤖
+        </div>
+
+        <div class="stat-number">
+            {{ total_matched }}
+        </div>
+
+        <div class="stat-label">
+            AI Matches Found
+        </div>
+
+    </div>
+
+
+    <!-- Recovered -->
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            ✅
+        </div>
+
+        <div class="stat-number">
+            {{ total_recovered }}
+        </div>
+
+        <div class="stat-label">
+            Recovered Items
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= QUICK ACTIONS ================= -->
+
+<div class="card" style="margin-bottom: 30px;">
+
+    <div class="page-header" style="margin-bottom: 20px;">
+
+        <h1 style="font-size: 26px;">
+            Quick Actions ⚡
+        </h1>
+
+        <p>
+            Report an item or search for a matching item.
+        </p>
+
+    </div>
+
+
+    <div class="grid">
+
+        <a
+            href="{{ url_for('report_lost') }}"
+            class="btn btn-danger"
+        >
+            🔴 Report Lost Item
+        </a>
+
+
+        <a
+            href="{{ url_for('report_found') }}"
+            class="btn btn-success"
+        >
+            🟢 Report Found Item
+        </a>
+
+
+        <a
+            href="{{ url_for('search') }}"
+            class="btn btn-primary"
+        >
+            🔍 Search Items
+        </a>
+
+
+        <a
+            href="{{ url_for('my_reports') }}"
+            class="btn btn-secondary"
+        >
+            📋 My Reports
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ================= NOTIFICATION ================= -->
+
+{% if unread_notifications is defined and unread_notifications > 0 %}
+
+<div class="card" style="margin-bottom: 30px;">
+
+    <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:20px;
+        flex-wrap:wrap;
+    ">
+
+        <div>
+
+            <h2 style="color:#f8fafc; margin-bottom:8px;">
+                🔔 New Notifications
+            </h2>
+
+            <p style="color:#94a3b8;">
+                You have
+                <strong style="color:#60a5fa;">
+                    {{ unread_notifications }}
+                </strong>
+                unread notification(s).
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('notifications') }}"
+            class="btn btn-primary"
+        >
+            View Notifications →
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- ================= RECENT REPORTS ================= -->
+
+<div class="card">
+
+    <div class="page-header" style="margin-bottom:20px;">
+
+        <h1 style="font-size:26px;">
+            Recent Reports 📋
+        </h1>
+
+        <p>
+            Your latest lost and found reports.
+        </p>
+
+    </div>
+
+
+    {% if recent_reports %}
+
+        <div class="report-grid">
+
+            {% for report in recent_reports %}
+
+            <div class="report-card">
+
+                <!-- Image -->
+
+                {% if report.image %}
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/' + report.image
+                        ) }}"
+                        alt="{{ report.item_name }}"
+                        class="report-image"
+                    >
+
+                {% else %}
+
+                    <div
+                        class="report-image"
+                        style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            font-size:45px;
+                        "
+                    >
+                        📦
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Content -->
+
+                <div class="report-content">
+
+                    <h3>
+                        {{ report.item_name }}
+                    </h3>
+
+
+                    <p>
+                        📂
+                        <strong>Category:</strong>
+                        {{ report.category }}
+                    </p>
+
+
+                    <p>
+                        📍
+                        <strong>Location:</strong>
+                        {{ report.location }}
+                    </p>
+
+
+                    <p>
+                        📌
+                        <strong>Type:</strong>
+
+                        {% if report.report_type == 'lost' %}
+
+                            <span class="badge badge-danger">
+                                Lost
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge-success">
+                                Found
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+
+                    <p>
+                        📊
+                        <strong>Status:</strong>
+
+                        {% if report.status == 'Match Found' %}
+
+                            <span class="badge badge-purple">
+                                🤖 Match Found
+                            </span>
+
+                        {% elif report.status == 'Recovered' %}
+
+                            <span class="badge badge-success">
+                                ✅ Recovered
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge-info">
+                                {{ report.status }}
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- View All -->
+
+        <div style="
+            text-align:center;
+            margin-top:25px;
+        ">
+
+            <a
+                href="{{ url_for('my_reports') }}"
+                class="btn btn-outline"
+            >
+                View All Reports →
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-state-icon">
+                📋
+            </div>
+
+            <h2>
+                No Reports Yet
+            </h2>
+
+            <p>
+                You haven't reported any lost or found item yet.
+            </p>
+
+            <br>
+
+            <div style="
+                display:flex;
+                justify-content:center;
+                gap:12px;
+                flex-wrap:wrap;
+            ">
+
+                <a
+                    href="{{ url_for('report_lost') }}"
+                    class="btn btn-danger"
+                >
+                    🔴 Report Lost Item
+                </a>
+
+                <a
+                    href="{{ url_for('report_found') }}"
+                    class="btn btn-success"
+                >
+                    🟢 Report Found Item
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

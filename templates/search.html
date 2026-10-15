@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Search | AI Smart Lost & Found{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>🔍 Search Lost & Found Items</h1>
+    <p>Find lost and found items using different filters.</p>
+</div>
+
+
+<!-- SEARCH FORM -->
+
+<div class="form-card">
+
+    <form method="GET" action="{{ url_for('search') }}">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="item_name">📦 Item Name</label>
+
+                <input
+                    type="text"
+                    id="item_name"
+                    name="item_name"
+                    value="{{ item_name }}"
+                    placeholder="e.g. iPhone, Wallet, Bag"
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="category">🏷️ Category</label>
+
+                <input
+                    type="text"
+                    id="category"
+                    name="category"
+                    value="{{ category }}"
+                    placeholder="e.g. Electronics"
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="location">📍 Location</label>
+
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value="{{ location }}"
+                    placeholder="e.g. Kota"
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="report_type">📋 Type</label>
+
+                <select id="report_type" name="report_type">
+
+                    <option value="">
+                        All Items
+                    </option>
+
+                    <option
+                        value="Lost"
+                        {% if report_type == "Lost" %}selected{% endif %}
+                    >
+                        🔴 Lost
+                    </option>
+
+                    <option
+                        value="Found"
+                        {% if report_type == "Found" %}selected{% endif %}
+                    >
+                        🟢 Found
+                    </option>
+
+                </select>
+            </div>
+
+        </div>
+
+
+        <div style="
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            margin-top:10px;
+        ">
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                🔍 Search
+            </button>
+
+            <a
+                href="{{ url_for('search') }}"
+                class="btn btn-secondary"
+            >
+                ↻ Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- RESULTS -->
+
+{% if results %}
+
+<div class="page-header" style="margin-top:35px;">
+
+    <h2>📋 Search Results</h2>
+
+    <p>
+        {{ results|length }} item(s) found.
+    </p>
+
+</div>
+
+
+<div class="report-grid">
+
+    {% for item in results %}
+
+    <div class="report-card">
+
+        {% if item.image %}
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename='uploads/' + item.image
+            ) }}"
+            alt="{{ item.item_name }}"
+            class="report-image"
+        >
+
+        {% endif %}
+
+
+        <div class="report-content">
+
+            {% if item.report_type == "Lost" %}
+
+                <span class="badge badge-danger">
+                    🔴 LOST
+                </span>
+
+            {% else %}
+
+                <span class="badge badge-success">
+                    🟢 FOUND
+                </span>
+
+            {% endif %}
+
+
+            <h3>
+                {{ item.item_name }}
+            </h3>
+
+
+            <p>
+                🏷️
+                <strong>Category:</strong>
+                {{ item.category }}
+            </p>
+
+
+            <p>
+                📍
+                <strong>Location:</strong>
+                {{ item.location }}
+            </p>
+
+
+            {% if item.description %}
+
+            <p>
+                📝
+                {{ item.description }}
+            </p>
+
+            {% endif %}
+
+
+            {% if item.status %}
+
+            <div style="margin-top:12px;">
+
+                <span class="badge badge-info">
+                    {{ item.status }}
+                </span>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+{% else %}
+
+<div class="empty-state">
+
+    <div class="empty-state-icon">
+        🔎
+    </div>
+
+    <h2>No Items Found</h2>
+
+    <p>
+        Try changing the search filters and search again.
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
